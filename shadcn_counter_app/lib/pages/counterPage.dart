@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_final_fields, library_private_types_in_public_api, use_super_parameters
-
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -51,10 +49,10 @@ class _CounterPageState extends State<CounterPage> {
     Color textColor;
     if (brightness == Brightness.dark) {
       containerColor = Colors.white;
-      textColor = Colors.black;
+      textColor = const Color.fromRGBO(16, 23, 42, 1);
     } else {
       containerColor = const Color.fromRGBO(226, 232, 240, 1);
-      textColor = Colors.black;
+      textColor = const Color.fromRGBO(16, 23, 42, 1);
     }
 
     return Scaffold(
@@ -65,8 +63,8 @@ class _CounterPageState extends State<CounterPage> {
             SizedBox(
               width: 300,
               child: ShadCard(
-                description: Text("Keep track"),
-                title: Text('Counter', style: theme.textTheme.h2),
+                description: const Text("Keep track"),
+                title: Text('Counter ', style: theme.textTheme.h2),
                 content: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Column(
@@ -80,7 +78,7 @@ class _CounterPageState extends State<CounterPage> {
                               keyboardType: TextInputType.number,
                               controller: _textEditingController,
                               placeholder: const Text(
-                                'Enter count down number',
+                                'Enter count down #️⃣',
                                 style: TextStyle(fontSize: 12),
                               ),
                             ),
@@ -106,10 +104,9 @@ class _CounterPageState extends State<CounterPage> {
                         child: Center(
                           child: Text(
                             '$_counter',
-                            style: TextStyle(
-                              color: textColor,
-                              fontSize: 24,
-                            ),
+                            style: theme.textTheme.h2.copyWith(
+                                color:
+                                    textColor), // Use Shadcn UI h1 text style
                           ),
                         ),
                       ),
