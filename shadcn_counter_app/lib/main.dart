@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: const ShadSlateColorScheme.dark(),
       ),
       debugShowCheckedModeBanner: false,
-      home: const counterPage(),
+      home: const CounterPage(),
     );
   }
 }

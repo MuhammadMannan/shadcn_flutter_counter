@@ -1,76 +1,121 @@
-// ignore_for_file: camel_case_types
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class counterPage extends StatefulWidget {
-  const counterPage({super.key});
+class CounterPage extends StatefulWidget {
+  const CounterPage({Key? key}) : super(key: key);
 
   @override
-  State<counterPage> createState() => _counterPageState();
+  _CounterPageState createState() => _CounterPageState();
 }
 
-class _counterPageState extends State<counterPage> {
+class _CounterPageState extends State<CounterPage> {
+  int _counter = 0;
+  TextEditingController _textEditingController = TextEditingController();
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  void _decrementCounter() {
+    setState(() {
+      if (_counter > 0) {
+        _counter--;
+      }
+    });
+  }
+
+  void _resetCounter() {
+    setState(() {
+      _counter = 0;
+    });
+  }
+
+  void _setCounterFromInput() {
+    setState(() {
+      int inputNumber = int.tryParse(_textEditingController.text) ?? 0;
+      _counter = inputNumber >= 0 ? inputNumber : 0;
+      _textEditingController.clear(); // Clear the input field
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
-    return Container(
-      //color: Colors.white,
-      child: Scaffold(
-        //backgroundColor: Colors.black,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 300,
-                child: ShadCard(
-                  //backgroundColor: Colors.black,
-                  title: Text('Counter', style: theme.textTheme.h4),
-                  content: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Column(
-                      children: [
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: ShadInput(
-                                placeholder: Text(
-                                  'Enter count down number',
-                                  style: TextStyle(fontSize: 12),
-                                ),
+    final brightness = Theme.of(context).brightness;
+
+    Color containerColor;
+    Color textColor;
+    if (brightness == Brightness.dark) {
+      containerColor = Colors.white;
+      textColor = Colors.black;
+    } else {
+      containerColor = const Color.fromRGBO(226, 232, 240, 1);
+      textColor = Colors.black;
+    }
+
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 300,
+              child: ShadCard(
+                description: Text("Keep track"),
+                title: Text('Counter', style: theme.textTheme.h2),
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: ShadInput(
+                              controller: _textEditingController,
+                              placeholder: const Text(
+                                'Enter count down number',
+                                style: TextStyle(fontSize: 12),
                               ),
                             ),
-                            ShadButton(
-                              icon: Icon(
-                                Icons.check,
-                                size: 15,
-                              ),
-                              height: 37,
+                          ),
+                          ShadButton(
+                            icon: const Icon(
+                              Icons.check,
+                              size: 15,
                             ),
-                          ],
+                            height: 38,
+                            onPressed: _setCounterFromInput,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      Container(
+                        height: 100,
+                        width: 243,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: containerColor,
                         ),
-                        const SizedBox(height: 15),
-                        Container(
-                            height: 100,
-                            width: 243,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: const Color.fromRGBO(226, 232, 240, 100),
+                        child: Center(
+                          child: Text(
+                            '$_counter',
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: 24,
                             ),
-                            child: Center(
-                              child: Text(
-                                '0',
-                                style: ShadTheme.of(context).textTheme.h2,
-                              ),
-                            )),
-                      ],
-                    ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  footer: Row(
+                ),
+                footer: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ShadButton(
@@ -80,9 +125,7 @@ class _counterPageState extends State<counterPage> {
                           Icons.add,
                           size: 20,
                         ),
-                        onPressed: () {
-                          print('pressed');
-                        },
+                        onPressed: _incrementCounter,
                       ),
                       ShadButton(
                         width: 57,
@@ -91,9 +134,7 @@ class _counterPageState extends State<counterPage> {
                           Icons.remove,
                           size: 20,
                         ),
-                        onPressed: () {
-                          print('deployed');
-                        },
+                        onPressed: _decrementCounter,
                       ),
                       ShadButton.outline(
                         width: 57,
@@ -102,18 +143,22 @@ class _counterPageState extends State<counterPage> {
                           Icons.restart_alt,
                           size: 20,
                         ),
-                        onPressed: () {
-                          print('deployed');
-                        },
+                        onPressed: _resetCounter,
                       ),
                     ],
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
+
+void main() {
+  runApp(const MaterialApp(
+    home: CounterPage(),
+  ));
 }
