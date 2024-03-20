@@ -75,6 +75,7 @@ class _CounterPageState extends State<CounterPage> {
                         children: [
                           Expanded(
                             child: ShadInput(
+                              keyboardType: TextInputType.number,
                               controller: _textEditingController,
                               placeholder: const Text(
                                 'Enter count down number',
